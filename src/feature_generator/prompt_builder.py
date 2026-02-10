@@ -68,7 +68,7 @@ Be specific, structured, and focus on both functional and technical aspects."""
             system=self.SYSTEM_PROMPT,
         )
 
-        console.print("[green]Requirements generated[/green]")
+        console.print("[green]✓ Requirements generated[/green]")
 
         return requirements
 
@@ -106,7 +106,7 @@ Be specific, structured, and focus on both functional and technical aspects."""
             system=self.SYSTEM_PROMPT,
         )
 
-        console.print("[green]Multi-screen requirements generated[/green]")
+        console.print("[green]✓ Multi-screen requirements generated[/green]")
 
         return requirements
 
@@ -144,7 +144,7 @@ Please update the requirements to incorporate this feedback. Maintain the same s
             system=self.SYSTEM_PROMPT,
         )
 
-        console.print("[green]Requirements refined[/green]")
+        console.print("[green]✓ Requirements refined[/green]")
 
         return refined
 
