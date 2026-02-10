@@ -99,7 +99,7 @@ class OllamaClient:
                     console.print(f"  {progress['status']}", end="\r")
 
             if show_progress:
-                console.print(f"[green]Model {model} ready[/green]")
+                console.print(f"[green]✓ Model {model} ready[/green]")
             return True
 
         except Exception as e:
