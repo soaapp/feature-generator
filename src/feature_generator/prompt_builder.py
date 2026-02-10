@@ -53,7 +53,7 @@ Be specific, structured, and focus on both functional and technical aspects."""
         Returns:
             Structured requirements as text
         """
-        console.print(f"[cyan]🤖 Generating requirements with {model}...[/cyan]")
+        console.print(f"[cyan]Generating requirements with {model}...[/cyan]")
 
         # Load template
         template_config = self._load_template(template)
@@ -68,7 +68,7 @@ Be specific, structured, and focus on both functional and technical aspects."""
             system=self.SYSTEM_PROMPT,
         )
 
-        console.print("[green]✓ Requirements generated[/green]")
+        console.print("[green]Requirements generated[/green]")
 
         return requirements
 
@@ -90,7 +90,7 @@ Be specific, structured, and focus on both functional and technical aspects."""
             Comprehensive requirements covering all screens
         """
         console.print(
-            f"[cyan]🤖 Generating multi-screen requirements for {len(analyses)} screens...[/cyan]"
+            f"[cyan]Generating multi-screen requirements for {len(analyses)} screens...[/cyan]"
         )
 
         # Load template
@@ -106,7 +106,7 @@ Be specific, structured, and focus on both functional and technical aspects."""
             system=self.SYSTEM_PROMPT,
         )
 
-        console.print("[green]✓ Multi-screen requirements generated[/green]")
+        console.print("[green]Multi-screen requirements generated[/green]")
 
         return requirements
 
@@ -127,7 +127,7 @@ Be specific, structured, and focus on both functional and technical aspects."""
         Returns:
             Refined requirements
         """
-        console.print("[cyan]🤖 Refining requirements based on feedback...[/cyan]")
+        console.print("[cyan]Refining requirements based on feedback...[/cyan]")
 
         prompt = f"""Here are the current requirements:
 
@@ -144,7 +144,7 @@ Please update the requirements to incorporate this feedback. Maintain the same s
             system=self.SYSTEM_PROMPT,
         )
 
-        console.print("[green]✓ Requirements refined[/green]")
+        console.print("[green]Requirements refined[/green]")
 
         return refined
 
@@ -299,4 +299,4 @@ Format as well-structured markdown with clear sections."""
             output_path = output_path.with_suffix(f".{format}")
 
         output_path.write_text(content)
-        console.print(f"[green]📝 Requirements saved to: {output_path}[/green]")
+        console.print(f"[green]Requirements saved to: {output_path}[/green]")
