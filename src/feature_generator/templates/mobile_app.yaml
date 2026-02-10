@@ -1,0 +1,60 @@
+name: "Mobile Application"
+description: "Optimized template for mobile app UIs (iOS/Android)"
+
+sections:
+  - "Overview"
+  - "Screen Breakdown"
+  - "Navigation Structure"
+  - "UI Components"
+  - "User Interactions & Gestures"
+  - "Data & State Management"
+  - "Platform-Specific Considerations"
+  - "Technical Recommendations"
+  - "Implementation Guide"
+
+tech_stack_defaults:
+  - "React Native with TypeScript"
+  - "React Navigation for routing"
+  - "Expo for development tooling"
+  - "Native Base or React Native Paper for UI components"
+
+guidelines: |
+  When analyzing mobile app mockups, focus on:
+  1. Touch-friendly UI elements (minimum 44x44pt tap targets)
+  2. Native platform patterns (iOS vs Android)
+  3. Gesture interactions (swipe, long-press, pinch-to-zoom)
+  4. Bottom sheet and modal patterns
+  5. Offline-first considerations
+  6. Push notifications
+  7. Device-specific features (camera, location, etc.)
+  8. Responsive layouts for different screen sizes
+
+output_format: |
+  # {App Name} - Mobile App Requirements
+
+  ## Overview
+  App concept, target platform(s), and key features.
+
+  ## Screen Breakdown
+  Detailed description of each screen and its purpose.
+
+  ## Navigation Structure
+  Navigation flow and screen transitions.
+
+  ## UI Components
+  Mobile-specific components and their behavior.
+
+  ## User Interactions & Gestures
+  Touch interactions, gestures, and animations.
+
+  ## Data & State Management
+  Data persistence, API integration, offline support.
+
+  ## Platform-Specific Considerations
+  iOS and Android specific requirements.
+
+  ## Technical Recommendations
+  Suggested tech stack and architecture for mobile.
+
+  ## Implementation Guide
+  Step-by-step mobile development approach.

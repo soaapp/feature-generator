@@ -1,0 +1,55 @@
+name: "Web Application"
+description: "Optimized template for modern web application UIs"
+
+sections:
+  - "Overview"
+  - "UI Components Breakdown"
+  - "Functional Requirements"
+  - "User Interactions & Flows"
+  - "Data Requirements"
+  - "Technical Recommendations"
+  - "Implementation Guide"
+  - "Accessibility Considerations"
+
+tech_stack_defaults:
+  - "React with TypeScript"
+  - "Tailwind CSS for styling"
+  - "Vite for build tooling"
+  - "React Router for navigation"
+
+guidelines: |
+  When analyzing web application mockups, focus on:
+  1. Component hierarchy and reusability
+  2. Responsive design considerations
+  3. State management needs
+  4. API integration points
+  5. Performance optimization opportunities
+  6. SEO requirements
+  7. Browser compatibility
+
+output_format: |
+  # {Project Name} - Requirements
+
+  ## Overview
+  Brief description of the application and its purpose.
+
+  ## UI Components Breakdown
+  List of all components with their responsibilities.
+
+  ## Functional Requirements
+  Detailed functional requirements for each feature.
+
+  ## User Interactions & Flows
+  User journey maps and interaction patterns.
+
+  ## Data Requirements
+  Data models, API endpoints, and state management needs.
+
+  ## Technical Recommendations
+  Suggested tech stack and architecture.
+
+  ## Implementation Guide
+  Step-by-step implementation approach.
+
+  ## Accessibility Considerations
+  WCAG compliance and accessibility features.
