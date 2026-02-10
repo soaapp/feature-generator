@@ -148,7 +148,7 @@ def init() -> None:
 
 @app.command()
 def analyze(
-    images: list[Path] = typer.Argument(..., help="Path(s) to image file(s) to analyze"),
+    images: list[Path] = typer.Argument(..., help="Path(s) to image or video file(s) to analyze"),
     output: Optional[Path] = typer.Option(
         None,
         "--output",
@@ -162,7 +162,7 @@ def analyze(
         help="Template to use (web_app, mobile_app, dashboard)",
     ),
     vision_model: str = typer.Option(
-        "llava:latest",
+        "llama3.2-vision:latest",
         "--vision-model",
         help="Vision model to use for image analysis",
     ),
@@ -177,18 +177,28 @@ def analyze(
         "-f",
         help="Output format (markdown, json, yaml)",
     ),
+    frame_interval: int = typer.Option(
+        30,
+        "--frame-interval",
+        help="For videos: extract one frame every N frames (default: 30)",
+    ),
 ) -> None:
     """
-    Analyze UI mockup image(s) and generate requirements.
+    Analyze UI mockup image(s) or video(s) and generate requirements.
 
     Examples:
       feature-gen analyze mockup.png
       feature-gen analyze screen1.png screen2.png --template mobile_app
       feature-gen analyze wireframe.jpg -o requirements.md
+      feature-gen analyze demo.mp4 --frame-interval 30
     """
+    # Determine file type for display
+    video_extensions = [".mp4", ".mov", ".avi", ".mkv", ".webm"]
+    file_type = "video" if len(images) == 1 and images[0].suffix.lower() in video_extensions else "image(s)"
+
     console.print(
         Panel.fit(
-            f"[bold cyan]Analyzing {len(images)} image(s)[/bold cyan]",
+            f"[bold cyan]Analyzing {len(images)} {file_type}[/bold cyan]",
             border_style="cyan",
         )
     )
@@ -198,8 +208,37 @@ def analyze(
         analyzer = ImageAnalyzer(ollama)
         builder = RequirementsBuilder(ollama)
 
-        # Analyze images
-        if len(images) == 1:
+        # Check if input is a video
+        video_extensions = [".mp4", ".mov", ".avi", ".mkv", ".webm"]
+        is_video = len(images) == 1 and images[0].suffix.lower() in video_extensions
+
+        # Analyze images or video
+        if is_video:
+            # Handle video file
+            video_analysis = await analyzer.analyze_video(
+                images[0],
+                frame_interval=frame_interval,
+                model=vision_model
+            )
+            # Convert video analysis to format expected by builder
+            # Use the frame analyses from the video
+            frame_analyses = video_analysis.get("frame_analyses", [])
+            if len(frame_analyses) == 1:
+                analysis = frame_analyses[0]
+                requirements = await builder.build_requirements(
+                    analysis=analysis,
+                    template=template,
+                    model=llm_model,
+                    output_format=format,
+                )
+            else:
+                requirements = await builder.build_multi_screen_requirements(
+                    analyses=frame_analyses,
+                    template=template,
+                    model=llm_model,
+                )
+        elif len(images) == 1:
+            # Single image
             analysis = await analyzer.analyze_image(images[0], model=vision_model)
             requirements = await builder.build_requirements(
                 analysis=analysis,
@@ -208,6 +247,7 @@ def analyze(
                 output_format=format,
             )
         else:
+            # Multiple images
             analyses = await analyzer.analyze_batch(images, model=vision_model)
             requirements = await builder.build_multi_screen_requirements(
                 analyses=analyses,
@@ -253,7 +293,7 @@ def list_models() -> None:
 
         if not models:
             console.print("[yellow]No models found. Pull models with:[/yellow]")
-            console.print("  ollama pull llava:latest")
+            console.print("  ollama pull llama3.2-vision:latest")
             console.print("  ollama pull llama3:latest")
             return
 
