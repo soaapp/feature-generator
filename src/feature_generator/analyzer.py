@@ -44,7 +44,7 @@ Be specific and detailed. If this is a hand-drawn sketch, interpret it as best a
     async def analyze_image(
         self,
         image_path: Path | str,
-        model: str = "llava:latest",
+        model: str = "llama3.2-vision:latest",
         custom_prompt: str = "",
     ) -> dict[str, Any]:
         """
@@ -66,7 +66,9 @@ Be specific and detailed. If this is a hand-drawn sketch, interpret it as best a
         if not image_path.suffix.lower() in [".png", ".jpg", ".jpeg", ".webp"]:
             raise ValueError(f"Unsupported image format: {image_path.suffix}")
 
-        console.print(f"[cyan]🔍 Analyzing {image_path.name} with {model}...[/cyan]")
+        console.print(f"[cyan]Analyzing {image_path.name} with {model}...[/cyan]")
+        console.print(f"[dim]Image path: {image_path}[/dim]")
+        console.print(f"[dim]Image size: {image_path.stat().st_size / 1024:.1f} KB[/dim]")
 
         # Use custom prompt if provided, otherwise use default
         prompt = custom_prompt or self.VISION_PROMPT
@@ -78,7 +80,8 @@ Be specific and detailed. If this is a hand-drawn sketch, interpret it as best a
             prompt=prompt,
         )
 
-        console.print("[green]✓ Vision analysis complete[/green]")
+        console.print("[green]Vision analysis complete[/green]")
+        console.print(f"[dim]Analysis length: {len(analysis_text)} characters[/dim]")
 
         # Structure the analysis result
         return {
@@ -92,7 +95,7 @@ Be specific and detailed. If this is a hand-drawn sketch, interpret it as best a
     async def analyze_batch(
         self,
         image_paths: list[Path | str],
-        model: str = "llava:latest",
+        model: str = "llama3.2-vision:latest",
     ) -> list[dict[str, Any]]:
         """
         Analyze multiple UI mockup images.
@@ -178,7 +181,7 @@ Be specific and detailed. If this is a hand-drawn sketch, interpret it as best a
         self,
         video_path: Path | str,
         frame_interval: int = 30,
-        model: str = "llava:latest",
+        model: str = "llama3.2-vision:latest",
     ) -> dict[str, Any]:
         """
         Analyze a video of UI mockup/demo by extracting key frames.
@@ -226,7 +229,7 @@ Be specific and detailed. If this is a hand-drawn sketch, interpret it as best a
 
             cap.release()
 
-            console.print(f"[green]✓ Extracted {len(frames)} frames[/green]")
+            console.print(f"[green]Extracted {len(frames)} frames[/green]")
 
             # Analyze each frame
             frame_analyses = await self.analyze_batch(frames, model=model)
