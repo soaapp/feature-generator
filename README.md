@@ -366,6 +366,6 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Made with ❤️ by the open-source community**
+**Made with care by the open-source community**
 
-If you find this tool useful, consider ⭐ starring the repo!
+If you find this tool useful, consider starring the repo!
