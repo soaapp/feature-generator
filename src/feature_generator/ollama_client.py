@@ -82,7 +82,7 @@ class OllamaClient:
         Pull a model from Ollama registry.
 
         Args:
-            model: Model name (e.g., "llava:latest", "llama3:latest")
+            model: Model name (e.g., "llama3.2-vision:latest", "llama3:latest")
             show_progress: Whether to show download progress
 
         Returns:
@@ -99,7 +99,7 @@ class OllamaClient:
                     console.print(f"  {progress['status']}", end="\r")
 
             if show_progress:
-                console.print(f"[green]✓ Model {model} ready[/green]")
+                console.print(f"[green]Model {model} ready[/green]")
             return True
 
         except Exception as e:
@@ -144,7 +144,7 @@ class OllamaClient:
     async def analyze_image(
         self,
         image_path: Path,
-        model: str = "llava:latest",
+        model: str = "llama3.2-vision:latest",
         prompt: str = "Analyze this UI mockup in detail.",
     ) -> str:
         """
@@ -162,20 +162,35 @@ class OllamaClient:
         if not await self.ensure_model(model):
             raise RuntimeError(f"Failed to ensure model {model} is available")
 
-        # Read and encode image
-        with open(image_path, "rb") as f:
-            image_data = f.read()
-
-        # Generate response using vision model
+        # Generate response using vision model with chat API
+        # The chat API is more reliable for vision models
         try:
-            response = self.client.generate(
+            response = self.client.chat(
                 model=model,
-                prompt=prompt,
-                images=[image_data],
+                messages=[
+                    {
+                        'role': 'user',
+                        'content': prompt,
+                        'images': [str(image_path)],  # Ollama chat API expects file path as string
+                    }
+                ],
             )
-            return response.get("response", "")
+            return response['message']['content']
         except Exception as e:
-            raise RuntimeError(f"Error analyzing image with {model}: {e}")
+            # Fallback to generate API if chat fails
+            try:
+                console.print("[yellow]Chat API failed, trying generate API...[/yellow]")
+                with open(image_path, "rb") as f:
+                    image_data = f.read()
+
+                response = self.client.generate(
+                    model=model,
+                    prompt=prompt,
+                    images=[image_data],
+                )
+                return response.get("response", "")
+            except Exception as e2:
+                raise RuntimeError(f"Error analyzing image with {model}: {e}, {e2}")
 
     async def generate_text(
         self,
@@ -220,6 +235,6 @@ class OllamaClient:
             Dictionary with 'vision' and 'llm' model names
         """
         return {
-            "vision": "llava:latest",
+            "vision": "llama3.2-vision:latest",
             "llm": "llama3:latest",
         }
