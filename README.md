@@ -44,10 +44,6 @@ curl -fsSL https://ollama.com/install.sh | sh
 **2. Install Feature Generator**
 
 ```bash
-# From PyPI (when published)
-pip install feature-generator
-
-# Or from source
 git clone https://github.com/jjahanzad/feature-generator.git
 cd feature-generator
 pip install -e .

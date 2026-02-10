@@ -53,8 +53,26 @@ class OllamaClient:
             List of model information dictionaries
         """
         try:
-            models = self.client.list()
-            return models.get("models", [])
+            response = self.client.list()
+            # The response is a dict-like object with 'models' key
+            # Each model needs to be converted to a dict
+            models_list = response.get("models", []) if isinstance(response, dict) else response.models
+
+            # Convert model objects to dicts
+            result = []
+            for model in models_list:
+                if hasattr(model, 'model'):  # It's an object
+                    result.append({
+                        "name": getattr(model, 'model', getattr(model, 'name', 'unknown')),
+                        "size": getattr(model, 'size', 0),
+                        "modified_at": getattr(model, 'modified_at', ''),
+                    })
+                elif isinstance(model, dict):  # It's already a dict
+                    result.append(model)
+                else:
+                    result.append({"name": str(model), "size": 0})
+
+            return result
         except Exception as e:
             console.print(f"[red]Error listing models: {e}[/red]")
             return []
